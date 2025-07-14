@@ -1,0 +1,46 @@
+{
+  "name": "xpres-utils",
+  "version": "1.0.0",
+  "author": "truongduchuy910",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/truongduchuy910/xpres-utils.git"
+  },
+  "bugs": {
+    "url": "https://github.com/truongduchuy910/xpres-utils/issues"
+  },
+  "homepage": "https://github.com/truongduchuy910/xpres-utils#readme",
+  "license": "ISC",
+  "engines": {
+    "node": "20",
+    "yarn": "use npm!",
+    "pnpm": "use npm!"
+  },
+  "main": "./dist/index.js",
+  "scripts": {
+    "format": "prettier --write src --write tests",
+    "build": "swc src -d dist --strip-leading-paths",
+    "semantic-release": "semantic-release",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@jest/globals": "^30.0.4",
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^11.0.3",
+    "@semantic-release/npm": "^12.0.2",
+    "@semantic-release/release-notes-generator": "^14.0.3",
+    "@swc/cli": "^0.7.8",
+    "@swc/core": "^1.12.11",
+    "@types/express": "^5.0.3",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.0.13",
+    "jest": "^30.0.4",
+    "prettier": "^3.6.2",
+    "semantic-release": "^24.2.7"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "yup": "^1.6.1"
+  }
+}

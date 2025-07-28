@@ -4,9 +4,9 @@ import { BAD_REQUEST } from "./constants";
 
 export function valid(
   schema: Schema,
-  { type = "Body", key, code = "V03" },
+  { type = "Body", key, code = "V03" }: any,
 ): RequestHandler {
-  return (req: Request, res: Response, next: NextFunction) => {
+  return (req: any, res: Response, next: NextFunction) => {
     const lowerType = type.toLowerCase();
     const value = key ? req?.[lowerType]?.[key] : req?.[lowerType];
 
@@ -25,14 +25,14 @@ export function valid(
   };
 }
 
-export function validBody(schema: Schema, { key, code = "VO1" }) {
+export function validBody(schema: Schema, { key, code = "VO1" }: any) {
   return valid(schema, { key, code, type: "Body" });
 }
 
-export function validParams(schema: Schema, { key, code = "VO2" }) {
+export function validParams(schema: Schema, { key, code = "VO2" }: any) {
   return valid(schema, { key, code, type: "Params" });
 }
 
-export function validQuery(schema: Schema, { key, code = "V03" }) {
+export function validQuery(schema: Schema, { key, code = "V03" }: any) {
   return valid(schema, { key, code, type: "Query" });
 }

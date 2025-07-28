@@ -12,14 +12,16 @@
   "homepage": "https://github.com/truongduchuy910/xpres-utils#readme",
   "license": "ISC",
   "engines": {
-    "node": "20",
+    "node": ">=20 <23",
     "yarn": "use npm!",
     "pnpm": "use npm!"
   },
   "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "format": "prettier --write src --write tests",
-    "build": "swc src -d dist --strip-leading-paths",
+    "build": "tsup",
     "semantic-release": "semantic-release",
     "test": "jest"
   },
@@ -37,7 +39,9 @@
     "@types/node": "^24.0.13",
     "jest": "^30.0.4",
     "prettier": "^3.6.2",
-    "semantic-release": "^24.2.7"
+    "semantic-release": "^24.2.7",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3"
   },
   "dependencies": {
     "express": "^5.1.0",

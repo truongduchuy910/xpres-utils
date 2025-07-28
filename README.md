@@ -1,12 +1,24 @@
+##  Usage
 
-## Base packages
+To use this template, you can clone the repository and install the dependencies:
 
-```sh
-npm install @semantic-release/commit-analyzer@latest @semantic-release/git@latest @semantic-release/github@latest @semantic-release/npm@latest @semantic-release/release-notes-generator@latest @swc/cli@latest @swc/core@latest @types/jest@latest @types/node@latest semantic-release@latest @jest/globals@latest jest@latest prettier@latest
+```
+npm i xpres-utils@latest
 ```
 
-```sh
-npm i express@latest yup@latest
-npm i @types/express@latest -D
+Then, you can create a simple Express application using the utilities provided by `xpres-utils`. Below is an example of how to set up a basic server that responds with "Hello World!" when accessed at the root URL.
 
+```js
+const express = require('express')
+const { OK } = require('xpres-utils');
+const app = express()
+const port = 3000
+
+app.get('/', (_req, res) => {
+  res.status(OK).send('Hello World!')
+})
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
 ```

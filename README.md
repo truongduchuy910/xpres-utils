@@ -1,3 +1,11 @@
+## Developer
+
+Generate locked file:
+
+```
+docker compose run --rm lockfile
+```
+
 ## Usage
 
 To use this template, you can clone the repository and install the dependencies:

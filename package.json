@@ -12,7 +12,7 @@
   "homepage": "https://github.com/truongduchuy910/xpres-utils#readme",
   "license": "ISC",
   "engines": {
-    "node": ">=20 <23",
+    "node": ">=22",
     "yarn": "use npm!",
     "pnpm": "use npm!"
   },
@@ -20,7 +20,9 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "format": "prettier --write src --write tests",
+    "format:diff": "git diff HEAD --name-only --diff-filter=d -z | xargs -0 -r -- prettier --write --ignore-unknown --no-error-on-unmatched-pattern",
+    "format:others": "git ls-files --others --exclude-standard | xargs -r -- prettier --write --ignore-unknown --no-error-on-unmatched-pattern",
+    "format": "npm run format:diff && npm run format:others",
     "build": "tsup",
     "semantic-release": "semantic-release",
     "test": "jest"

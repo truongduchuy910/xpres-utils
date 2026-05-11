@@ -1,38 +1,55 @@
-import type { Request, Response, NextFunction, RequestHandler } from "express";
-import { type Schema, ValidationError } from "yup";
+import type { Request, Response, NextFunction } from "express";
+import { type Schema } from "yup";
 import { BAD_REQUEST } from "./constants";
 
-export function valid(
-  schema: Schema,
-  { type = "Body", key, code = "V03" }: any,
-): RequestHandler {
-  return (req: any, res: Response, next: NextFunction) => {
-    const lowerType = type.toLowerCase();
-    const value = key ? req?.[lowerType]?.[key] : req?.[lowerType];
+interface Req<P = any, Q = any, B = any> extends Request {
+  valid?: { params?: P; query?: Q; body?: B };
+}
 
-    schema
-      .validate(value)
-      .then((data) => {
-        req[`valid${type}`] = data;
+interface Res extends Response {}
 
-        next();
-      })
-      .catch((error: Error) => {
-        if (error instanceof ValidationError) {
-          res.status(BAD_REQUEST).json({ message: error.message, value, code });
-        }
-      });
+type Nex = NextFunction;
+
+export function bodyCast(schema: Schema) {
+  return function (req: Req, res: Res, next: Nex) {
+    if (!req.valid) req.valid = {};
+    try {
+      req.valid.body = schema.cast(req.body);
+
+      next();
+    } catch (error) {
+      console.error(error.message, req.body);
+      res.status(BAD_REQUEST).json({ message: error.message });
+    }
   };
 }
 
-export function validBody(schema: Schema, { key, code = "VO1" }: any) {
-  return valid(schema, { key, code, type: "Body" });
+export function queryCast(schema: Schema) {
+  return function (req: Req, res: Res, next: Nex) {
+    if (!req.valid) req.valid = {};
+    if (!req.valid.query) req.valid.query = {};
+    try {
+      req.valid.query = schema.cast(req.query);
+
+      next();
+    } catch (error) {
+      console.error(error.message, req.body);
+      res.status(BAD_REQUEST).json({ message: error.message });
+    }
+  };
 }
 
-export function validParams(schema: Schema, { key, code = "VO2" }: any) {
-  return valid(schema, { key, code, type: "Params" });
-}
+export function paramCast(schema: Schema, key: string) {
+  return function (req: Req, res: Res, next: Nex) {
+    if (!req.valid) req.valid = {};
+    if (!req.valid.params) req.valid.params = {};
+    try {
+      req.valid.params[key] = schema.cast(req.params?.[key]);
 
-export function validQuery(schema: Schema, { key, code = "V03" }: any) {
-  return valid(schema, { key, code, type: "Query" });
+      next();
+    } catch (error) {
+      console.error(error.message, req.body);
+      res.status(BAD_REQUEST).json({ message: error.message });
+    }
+  };
 }

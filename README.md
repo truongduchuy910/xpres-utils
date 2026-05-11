@@ -91,3 +91,35 @@ app.listen(port, () => {
 | 505  | HTTP_VERSION_NOT_SUPPORTED      | Phiên bản HTTP không được hỗ trợ    | Client dùng phiên bản HTTP mà server không hỗ trợ.                                                               |
 | 507  | INSUFFICIENT_STORAGE            | Không đủ bộ nhớ lưu trữ             | Server không đủ dung lượng lưu trữ để hoàn thành yêu cầu.                                                        |
 | 511  | NETWORK_AUTHENTICATION_REQUIRED | Yêu cầu xác thực mạng               | Client cần xác thực với mạng (thường gặp ở captive portal Wi-Fi).                                                |
+
+## Where The Data Goes
+
+These helpers write normalized values into `req.valid`:
+
+- `bodyCast(schema)` -> `req.valid.body`
+- `queryCast(schema)` -> `req.valid.query`
+- `paramCast(schema, key)` -> `req.valid.params[key]`
+
+Because handlers read from `req.valid`, the common pattern is:
+
+```ts
+router.put(
+  "/resource/:id",
+  paramCast(number().required(), "id"),
+  queryCast(
+    object({
+      ids: array().transform((t) => t?.split(",")?.map(Number) || []),
+    }),
+  ),
+  bodyCast(
+    object({
+      name: string().required(),
+    }),
+  ),
+  async function (req: Req, res: Res) {
+    const { id } = req.valid?.params || {};
+    const { ids } = req.valid?.query || {};
+    const { name } = req.valid?.body || {};
+  },
+);
+```

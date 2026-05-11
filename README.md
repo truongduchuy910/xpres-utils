@@ -103,6 +103,17 @@ These helpers write normalized values into `req.valid`:
 Because handlers read from `req.valid`, the common pattern is:
 
 ```ts
+const express = require("express");
+const {
+  OK,
+  BAD_REQUEST,
+  bodyCast,
+  queryCast,
+  paramCast,
+} = require("xpres-utils");
+
+const router = express.Router();
+
 router.put(
   "/resource/:id",
   paramCast(number().required(), "id"),
@@ -117,9 +128,18 @@ router.put(
     }),
   ),
   async function (req: Req, res: Res) {
-    const { id } = req.valid?.params || {};
-    const { ids } = req.valid?.query || {};
-    const { name } = req.valid?.body || {};
+    try {
+      const { id } = req.valid?.params || {};
+      const { ids } = req.valid?.query || {};
+      const { name } = req.valid?.body || {};
+
+      res.status(OK).json({ id, ids, name });
+    } catch (e) {
+      console.error(e);
+      res.status(BAD_REQUEST).json({ code: "YOUR_CODE" });
+    }
   },
 );
+
+export default router;
 ```
